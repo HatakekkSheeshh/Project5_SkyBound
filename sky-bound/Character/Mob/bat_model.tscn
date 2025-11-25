@@ -7,6 +7,7 @@
 [sub_resource type="Animation" id="Animation_s7p2f"]
 resource_name = "Idle"
 length = 1.3333334
+loop_mode = 1
 tracks/0/type = "position_3d"
 tracks/0/imported = true
 tracks/0/enabled = true
@@ -187,19 +188,19 @@ node_connections = [&"output", 0, &"OneShot", &"OneShot", 0, &"Idle", &"OneShot"
 script = ExtResource("2_37koa")
 
 [node name="Skeleton3D" parent="Armature" index="0"]
-bones/0/position = Vector3(0, -0.007400004, 0)
-bones/1/rotation = Quaternion(-0.028654926, 0.18848532, -0.6867176, 0.7014778)
-bones/2/rotation = Quaternion(-0.056015447, -0.016041052, 0.27483788, 0.9597235)
-bones/3/rotation = Quaternion(0.04121358, 0.05998498, 0.2647528, 0.961566)
-bones/4/rotation = Quaternion(-0.028654926, -0.18848532, 0.6867176, 0.7014778)
-bones/5/rotation = Quaternion(-0.056015447, 0.016041052, -0.27483788, 0.9597235)
-bones/6/rotation = Quaternion(0.04121358, -0.05998498, -0.2647528, 0.961566)
+bones/0/position = Vector3(0, 0.023599997, 0)
+bones/1/rotation = Quaternion(0.20943433, -0.022860961, -0.62025833, 0.7555754)
+bones/2/rotation = Quaternion(0.1698422, 0.07749513, 0.40791002, 0.8937324)
+bones/3/rotation = Quaternion(0.100487374, 0.089661196, 0.36283356, 0.922071)
+bones/4/rotation = Quaternion(0.20943433, 0.022860961, 0.62025833, 0.7555754)
+bones/5/rotation = Quaternion(0.1698422, -0.07749513, -0.40791002, 0.8937324)
+bones/6/rotation = Quaternion(0.100487374, -0.089661196, -0.36283356, 0.922071)
 bones/7/position = Vector3(0.1309921, -0.22739176, -0.087851465)
 bones/7/rotation = Quaternion(0.26196837, 0.08345512, 0.26575127, 0.9240044)
-bones/8/rotation = Quaternion(3.8433356e-08, 0.6908824, 0.7229672, 1.6451473e-08)
+bones/8/rotation = Quaternion(3.12138e-08, 0.63015306, 0.7764711, 2.5807038e-08)
 bones/10/position = Vector3(-0.1309921, -0.22739176, -0.087851465)
 bones/10/rotation = Quaternion(0.26196837, -0.083455116, -0.26575127, 0.9240044)
-bones/11/rotation = Quaternion(2.5423752e-08, 0.6908824, 0.7229672, 3.637758e-08)
+bones/11/rotation = Quaternion(2.7732407e-08, 0.63015306, 0.7764711, 3.1797523e-08)
 
 [node name="bat" parent="Armature/Skeleton3D" index="0"]
 surface_material_override/0 = ExtResource("2_vd76i")

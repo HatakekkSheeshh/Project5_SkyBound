@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cymg35weskqim" path="res://Scripts/mob_spawner_3d.gd" id="1_5pjfe"]
 [ext_resource type="PackedScene" uid="uid://bw2m6rpraye2r" path="res://Assets/mob/spawner/spawner_model.glb" id="1_ixxdg"]
-[ext_resource type="PackedScene" uid="uid://dkq1vdvyixb2x" path="res://Character/Mob/bat_model.tscn" id="2_agtk7"]
+[ext_resource type="PackedScene" uid="uid://dkq1vdvyixb2x" path="res://Scenes/Character/Mob/bat_model.tscn" id="2_agtk7"]
 
 [node name="MobSpawner3D" type="Node3D"]
 script = ExtResource("1_5pjfe")

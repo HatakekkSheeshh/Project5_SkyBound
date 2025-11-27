@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dp7sxe5xl5shk"]
+[gd_scene load_steps=7 format=3 uid="uid://dp7sxe5xl5shk"]
 
 [ext_resource type="Texture2D" uid="uid://bos7rridjkps1" path="res://Assets/level/checkboard.png" id="1_cig4d"]
-[ext_resource type="PackedScene" uid="uid://ytoy603uaj54" path="res://Character/Mob/bat.tscn" id="2_fr4tk"]
 [ext_resource type="PackedScene" uid="uid://duvamawbugyck" path="res://Character/Spawner/mob_spawner_3d.tscn" id="3_e6u40"]
 
 [sub_resource type="Environment" id="Environment_pev5d"]
@@ -71,10 +70,46 @@ use_collision = true
 size = Vector3(4, 1, 3)
 material = SubResource("StandardMaterial3D_ooyhk")
 
+[node name="Bridge3" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -10.456157, -0.93457466, -0.48203373)
+use_collision = true
+size = Vector3(4, 1, 3)
+material = SubResource("StandardMaterial3D_ooyhk")
+
+[node name="Bridge7" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -14.391084, -1.5598578, -1.9006586)
+use_collision = true
+size = Vector3(4, 1, 3)
+material = SubResource("StandardMaterial3D_ooyhk")
+
+[node name="Bridge8" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -18.326012, -1.412195, -0.67096806)
+use_collision = true
+size = Vector3(4, 1, 3)
+material = SubResource("StandardMaterial3D_ooyhk")
+
+[node name="Bridge9" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -22.194416, -1.412195, -0.67096806)
+use_collision = true
+size = Vector3(4, 1, 3)
+material = SubResource("StandardMaterial3D_ooyhk")
+
 [node name="Platform6" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.735365, 0)
 use_collision = true
 size = Vector3(17, 11, 15)
+material = SubResource("StandardMaterial3D_pixig")
+
+[node name="Platform8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.80051, -8.029215, 14.816681)
+use_collision = true
+size = Vector3(29.289215, 11, 15)
+material = SubResource("StandardMaterial3D_pixig")
+
+[node name="Platform9" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, -5.735, 0)
+use_collision = true
+size = Vector3(12, 12, 15)
 material = SubResource("StandardMaterial3D_pixig")
 
 [node name="Platform7" type="CSGBox3D" parent="."]
@@ -86,8 +121,14 @@ material = SubResource("StandardMaterial3D_7l0sc")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9653349, 0)
 
-[node name="Bat" parent="." instance=ExtResource("2_fr4tk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6573968, 1.7213006, -6.0621314)
-
 [node name="MobSpawner3D" parent="." instance=ExtResource("3_e6u40")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2402883, -2.719192)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.528447, 1.0225637, -6.068798)
+
+[node name="MobSpawner3D3" parent="." instance=ExtResource("3_e6u40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7074866, 1.0225637, 28.148285)
+
+[node name="MobSpawner3D4" parent="." instance=ExtResource("3_e6u40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.291187, -2.5047736, 19.669996)
+
+[node name="MobSpawner3D2" parent="." instance=ExtResource("3_e6u40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.82441, 1.0225637, -6.068798)

@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b3w2vp0dbsfa4" path="res://Assets/mob/bat/bat_model.glb" id="1_s3vfv"]
 [ext_resource type="Script" uid="uid://ca66he35cvexn" path="res://Scripts/bat_model.gd" id="2_37koa"]
-[ext_resource type="Material" uid="uid://bxdacd3y1b0c4" path="res://Character/Mob/bat_material.tres" id="2_vd76i"]
+[ext_resource type="Material" uid="uid://bxdacd3y1b0c4" path="res://Scenes/Character/Mob/bat_material.tres" id="2_vd76i"]
 
 [sub_resource type="Animation" id="Animation_s7p2f"]
 resource_name = "Idle"

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ytoy603uaj54"]
 
-[ext_resource type="PackedScene" uid="uid://dkq1vdvyixb2x" path="res://Character/Mob/bat_model.tscn" id="1_0o8ui"]
+[ext_resource type="PackedScene" uid="uid://dkq1vdvyixb2x" path="res://Scenes/Character/Mob/bat_model.tscn" id="1_0o8ui"]
 [ext_resource type="Script" uid="uid://bdmckj80yb4gu" path="res://Scripts/bat.gd" id="1_jfwk3"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ipm0s"]

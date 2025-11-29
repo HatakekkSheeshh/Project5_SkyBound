@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bos7rridjkps1" path="res://Assets/level/checkboard.png" id="1_cig4d"]
 [ext_resource type="PackedScene" uid="uid://ytoy603uaj54" path="res://Scenes/Character/Mob/bat.tscn" id="2_fr4tk"]
 [ext_resource type="PackedScene" uid="uid://duvamawbugyck" path="res://Scenes/Character/Spawner/mob_spawner_3d.tscn" id="3_e6u40"]
-[ext_resource type="PackedScene" uid="uid://dess7tva0hmaa" path="res://Scenes/Character/player.tscn" id="4_ugldd"]
+[ext_resource type="PackedScene" uid="uid://dess7tva0hmaa" path="res://Scenes/player.tscn" id="4_ugldd"]
 
 [sub_resource type="Environment" id="Environment_pev5d"]
 background_mode = 1

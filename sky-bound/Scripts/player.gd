@@ -3,6 +3,8 @@ extends CharacterBody3D
 @onready var camera = %PlayerCamera
 @onready var gun = %PlayerGun
 
+const BULLET = preload("uid://bm1y0p1m7eepn")
+
 const MOUSE_SEN_SCALE = 0.2
 const CAMERA_MAX_UP = 90
 const CAMERA_MAX_DOWN = -80
@@ -21,7 +23,17 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	process_gravity(delta)
+	
 	handle_move_input()
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		handle_jumping()
+	elif Input.is_action_just_released("jump") and velocity.y > 0:
+		velocity.y = 0.0
+	
+	if Input.is_action_just_pressed("shoot"):
+		shoot_bullet()
+	
 	move_and_slide()
 
 
@@ -38,3 +50,21 @@ func handle_move_input() -> void:
 	
 	velocity.x = direction.x * SPEED
 	velocity.z = direction.z * SPEED
+
+
+func handle_jumping() -> void:
+	velocity.y = 10
+
+
+func process_gravity(delta) -> void:
+	if is_on_floor():
+		velocity.y = 0
+	else:
+		velocity.y -= 20 * delta
+
+
+func shoot_bullet() -> void:
+	var new_bullet: Area3D = BULLET.instantiate()
+	%Marker3D.add_child(new_bullet)
+	
+	new_bullet.global_transform = %Marker3D.global_transform

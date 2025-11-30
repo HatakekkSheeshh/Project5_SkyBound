@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @onready var camera = %PlayerCamera
 @onready var gun = %PlayerGun
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 const BULLET = preload("uid://bm1y0p1m7eepn")
 
@@ -68,3 +69,4 @@ func shoot_bullet() -> void:
 	%Marker3D.add_child(new_bullet)
 	
 	new_bullet.global_transform = %Marker3D.global_transform
+	audio_stream_player.play()

@@ -14,13 +14,17 @@ var speed= 3.0
 
 func _physics_process(delta) -> void:
 	player = get_player()
+	if player == null: return
+	
 	var dir = global_position.direction_to(player.global_position)
 	dir.y=0.0
-	linear_velocity=dir*speed
-	bat_model.rotation.y=Vector3.FORWARD.signed_angle_to(dir,Vector3.UP)+PI
+	linear_velocity = dir*speed
+	bat_model.rotation.y = Vector3.FORWARD.signed_angle_to(dir, Vector3.UP) + PI
 
 func take_damage():
-	if health<0:
+	if player == null: return
+	
+	if health < 0:
 		return
 	
 	bat_model.hurt()

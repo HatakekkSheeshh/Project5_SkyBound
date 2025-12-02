@@ -92,36 +92,6 @@ use_collision = true
 size = Vector3(4, 1, 3)
 material = SubResource("StandardMaterial3D_8l27e")
 
-[node name="Bridge12" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -14.932823, -2.6868973, 24.599483)
-use_collision = true
-size = Vector3(2.2241821, 1, 3)
-material = SubResource("StandardMaterial3D_8l27e")
-
-[node name="Bridge15" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -12.615749, -2.1468577, 24.617228)
-use_collision = true
-size = Vector3(3.3458252, 1, 3)
-material = SubResource("StandardMaterial3D_8l27e")
-
-[node name="Bridge13" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -10.511871, -0.988914, 25.06652)
-use_collision = true
-size = Vector3(3.4101563, 1, 2.230957)
-material = SubResource("StandardMaterial3D_8l27e")
-
-[node name="Bridge14" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6.193825, -0.013546944, 24.355625)
-use_collision = true
-size = Vector3(4, 1, 3)
-material = SubResource("StandardMaterial3D_8l27e")
-
-[node name="Bridge16" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.980381, -0.013546944, 24.355625)
-use_collision = true
-size = Vector3(4, 1, 3)
-material = SubResource("StandardMaterial3D_8l27e")
-
 [node name="Bridge7" type="CSGBox3D" parent="."]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -14.391, 0, -1.901)
 use_collision = true
@@ -147,7 +117,7 @@ size = Vector3(17, 11, 15)
 material = SubResource("StandardMaterial3D_l4jf6")
 
 [node name="Platform8" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.844763, -8.029215, 15.333302)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.845, -5.375, 17.5)
 use_collision = true
 size = Vector3(29.289215, 11, 15)
 material = SubResource("StandardMaterial3D_l4jf6")
@@ -159,22 +129,16 @@ size = Vector3(12, 12, 15)
 material = SubResource("StandardMaterial3D_l4jf6")
 
 [node name="Platform7" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 26)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.375, 28.409157)
 use_collision = true
-size = Vector3(9, 11, 9)
+size = Vector3(25, 11, 15)
 material = SubResource("StandardMaterial3D_d3sah")
 
 [node name="MobSpawner3D" parent="." instance=ExtResource("2_wspvq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.528447, 1.0225637, -6.068798)
-
-[node name="MobSpawner3D3" parent="." instance=ExtResource("2_wspvq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7074866, 1.0225637, 28.148285)
-
-[node name="MobSpawner3D4" parent="." instance=ExtResource("2_wspvq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.291187, -2.5047736, 19.669996)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.528, 2, -6.069)
 
 [node name="MobSpawner3D2" parent="." instance=ExtResource("2_wspvq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.82441, 1.0225637, -6.068798)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.824, 2, -6.069)
 
 [node name="Player" parent="." instance=ExtResource("4_8l27e")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.962957, 0.6681442, 16.409203)
@@ -192,7 +156,5 @@ volume_db = -5.0
 autoplay = true
 
 [connection signal="mob_spawned" from="MobSpawner3D" to="." method="_on_mob_spawner_3d_mob_spawned"]
-[connection signal="mob_spawned" from="MobSpawner3D3" to="." method="_on_mob_spawner_3d_3_mob_spawned"]
-[connection signal="mob_spawned" from="MobSpawner3D4" to="." method="_on_mob_spawner_3d_mob_spawned"]
 [connection signal="mob_spawned" from="MobSpawner3D2" to="." method="_on_mob_spawner_3d_mob_spawned"]
 [connection signal="body_entered" from="Killplane" to="." method="_on_killplane_body_entered"]

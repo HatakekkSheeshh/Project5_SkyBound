@@ -88,6 +88,4 @@ text = "Quit Game"
 
 [connection signal="pressed" from="VBoxContainer/single" to="." method="_on_single_pressed"]
 [connection signal="pressed" from="VBoxContainer/multi" to="." method="_on_multi_pressed"]
-[connection signal="pressed" from="VBoxContainer/multi" to="." method="_on_single_pressed"]
 [connection signal="pressed" from="VBoxContainer/quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="VBoxContainer/quit" to="." method="_on_single_pressed"]

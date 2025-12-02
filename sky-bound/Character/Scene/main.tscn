@@ -157,7 +157,9 @@ volume_db = -5.0
 autoplay = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://dess7tva0hmaa")
 spawn_path = NodePath("..")
+spawn_limit = 5
 script = ExtResource("6_l4jf6")
 network_player = ExtResource("4_8l27e")
 

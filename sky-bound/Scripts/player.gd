@@ -21,7 +21,9 @@ func _ready() -> void:
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	if !is_multiplayer_authority():
+	if is_multiplayer_authority():
+		camera.current = true
+	else: 
 		camera.current = false
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -31,7 +33,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _physics_process(delta: float) -> void:
-	if multiplayer.is_server():
+	if is_multiplayer_authority():
 		process_gravity(delta)
 		
 		handle_move_input()
@@ -46,7 +48,8 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		
 		synced_position = global_position
-	else: 
+		rpc("_update_position", synced_position)
+	else:
 		global_position = synced_position
 		
 func move_camera(event) -> void:
@@ -58,8 +61,8 @@ func move_camera(event) -> void:
 	camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, CAMERA_MAX_DOWN, CAMERA_MAX_UP)
 
 func handle_move_input() -> void:
-	if !multiplayer.is_server():
-		return 	
+	if !is_multiplayer_authority():
+		return
 	var input_direction_2d = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var input_direction_3d = Vector3(input_direction_2d.x, 0.0, input_direction_2d.y)
 	var direction = transform.basis * input_direction_3d
@@ -82,3 +85,7 @@ func shoot_bullet() -> void:
 	
 	new_bullet.global_transform = %Marker3D.global_transform
 	audio_stream_player.play()
+
+@rpc("any_peer", "call_local", "unreliable")
+func _update_position(new_pos: Vector3) -> void:
+	synced_position = new_pos

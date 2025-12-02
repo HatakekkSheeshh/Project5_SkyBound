@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="SkyBound"
-run/main_scene="uid://dp7sxe5xl5shk"
+run/main_scene="uid://cptts8oobi5tx"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 

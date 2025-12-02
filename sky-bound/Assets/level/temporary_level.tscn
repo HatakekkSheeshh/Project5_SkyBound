@@ -135,7 +135,7 @@ size = Vector3(9, 11, 9)
 material = SubResource("StandardMaterial3D_7l0sc")
 
 [node name="Player" parent="." instance=ExtResource("4_ugldd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 5.123776)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8236526, 25.597927)
 
 [node name="KillPlane" type="Area3D" parent="."]
 

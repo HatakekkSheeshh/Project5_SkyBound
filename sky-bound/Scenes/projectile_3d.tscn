@@ -6,8 +6,8 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n76lf"]
 render_priority = 0
 shader = ExtResource("2_17iqx")
-shader_parameter/tail_color = Color(1, 1, 0.25490198, 1)
-shader_parameter/head_color = Color(1, 0.27450982, 0, 1)
+shader_parameter/tail_color = Color(0, 0.94580334, 0.974312, 1)
+shader_parameter/head_color = Color(1, 1, 1, 1)
 
 [node name="Projectile3D" instance=ExtResource("1_070fk")]
 transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 0, 0)

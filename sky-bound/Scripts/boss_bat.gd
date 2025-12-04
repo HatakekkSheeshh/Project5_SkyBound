@@ -8,8 +8,8 @@ var player = null
 
 signal died
 
-var health= 3
-var speed= randf_range(2.0,4.0)
+var health= 10
+var speed= randf_range(2.0,3.0)
 
 
 func _physics_process(delta) -> void:

@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://duvamawbugyck"]
+[gd_scene load_steps=5 format=3 uid="uid://duvamawbugyck"]
 
 [ext_resource type="Script" uid="uid://cymg35weskqim" path="res://Scripts/mob_spawner_3d.gd" id="1_5pjfe"]
-[ext_resource type="PackedScene" uid="uid://ytoy603uaj54" path="res://Scenes/Character/Mob/bat.tscn" id="2_u0ejk"]
+[ext_resource type="PackedScene" uid="uid://c1vg0yntw7eyf" path="res://Character/bat.tscn" id="2_u0ejk"]
+[ext_resource type="PackedScene" uid="uid://b0h60dofcvbfc" path="res://Character/boss_bat.tscn" id="3_iovll"]
 [ext_resource type="PackedScene" uid="uid://h1j0p5yvweua" path="res://Scenes/Character/Spawner/spawner_model.tscn" id="3_u0ejk"]
 
 [node name="MobSpawner3D" type="Node3D"]
 script = ExtResource("1_5pjfe")
 mob_to_spawn = ExtResource("2_u0ejk")
+boss_mob_to_spawn = ExtResource("3_iovll")
 
 [node name="spawner_model" parent="." instance=ExtResource("3_u0ejk")]
 

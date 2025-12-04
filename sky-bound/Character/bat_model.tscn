@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://b3w2vp0dbsfa4" path="res://Assets/mob/bat/bat_model.glb" id="1_hl0r6"]
 [ext_resource type="Script" uid="uid://ca66he35cvexn" path="res://Scripts/bat_model.gd" id="2_mxyk6"]
-[ext_resource type="Material" path="res://Character/Mob/bat_material.tres" id="3_nna42"]
+[ext_resource type="Material" uid="uid://c5rpcksh30tlb" path="res://Character/new_standard_material_3d.tres" id="3_hl0r6"]
 
 [sub_resource type="Animation" id="Animation_s7p2f"]
 resource_name = "Idle"
@@ -105,7 +105,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Armature/Skeleton3D/bat:scale")
+tracks/0/path = NodePath("Armature:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -137,14 +137,14 @@ _data = {
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Armature/Skeleton3D/bat:scale")
+tracks/0/path = NodePath("Armature:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(1, 1, 1), Vector3(1.1, 1.1, 1.1), Vector3(1.2, 1.2, 1.2), Vector3(1.1, 1.1, 1.1), Vector3(1, 1, 1)]
+"values": [Vector3(1, 1, 1), Vector3(2, 2, 2), Vector3(1, 1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -153,10 +153,10 @@ tracks/1/path = NodePath("Armature/Skeleton3D/bat:surface_material_override/0:al
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(-0.06666672, 1),
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(0.932807, 0.21715435, 0.32464942, 1)]
+"values": [Color(1, 1, 1, 1), Color(0.9064104, 0, 0.19092739, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_37koa"]
@@ -174,7 +174,6 @@ animation = &"Idle"
 mix_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_37koa"]
-graph_offset = Vector2(17.876373, 4.431259)
 nodes/output/position = Vector2(780, 100)
 nodes/Idle/node = SubResource("AnimationNodeAnimation_doon1")
 nodes/Idle/position = Vector2(340, 40)
@@ -188,22 +187,22 @@ node_connections = [&"output", 0, &"OneShot", &"OneShot", 0, &"Idle", &"OneShot"
 script = ExtResource("2_mxyk6")
 
 [node name="Skeleton3D" parent="Armature" index="0"]
-bones/0/position = Vector3(0, -0.01060074, 0)
-bones/1/rotation = Quaternion(-0.038993616, 0.19803585, -0.6824667, 0.70249593)
-bones/2/rotation = Quaternion(-0.080385506, -0.022294635, 0.26837364, 0.9596962)
-bones/3/rotation = Quaternion(0.014320299, 0.052529432, 0.25552586, 0.9652679)
-bones/4/rotation = Quaternion(-0.038993616, -0.19803585, 0.6824667, 0.70249593)
-bones/5/rotation = Quaternion(-0.080385506, 0.022294635, -0.26837364, 0.9596962)
-bones/6/rotation = Quaternion(0.014320299, -0.052529432, -0.25552586, 0.9652679)
+bones/0/position = Vector3(0, 0.023599997, 0)
+bones/1/rotation = Quaternion(0.20163682, -0.018032517, -0.62625897, 0.7528725)
+bones/2/rotation = Quaternion(0.1735565, 0.07822857, 0.40358424, 0.894918)
+bones/3/rotation = Quaternion(0.11430097, 0.095342115, 0.36296946, 0.9198361)
+bones/4/rotation = Quaternion(0.20163682, 0.018032517, 0.62625897, 0.7528725)
+bones/5/rotation = Quaternion(0.1735565, -0.07822857, -0.40358424, 0.894918)
+bones/6/rotation = Quaternion(0.11430097, -0.095342115, -0.36296946, 0.9198361)
 bones/7/position = Vector3(0.1309921, -0.22739176, -0.087851465)
 bones/7/rotation = Quaternion(0.26196837, 0.08345512, 0.26575127, 0.9240044)
-bones/8/rotation = Quaternion(3.706321e-08, 0.6825219, 0.7308652, 1.8418794e-08)
+bones/8/rotation = Quaternion(3.488097e-08, 0.6386452, 0.76950145, 2.5654213e-08)
 bones/10/position = Vector3(-0.1309921, -0.22739176, -0.087851465)
 bones/10/rotation = Quaternion(0.26196837, -0.083455116, -0.26575127, 0.9240044)
-bones/11/rotation = Quaternion(2.3426729e-08, 0.6825219, 0.7308652, 4.1768168e-08)
+bones/11/rotation = Quaternion(2.660812e-08, 0.6386452, 0.76950145, 3.2031743e-08)
 
 [node name="bat" parent="Armature/Skeleton3D" index="0"]
-surface_material_override/0 = ExtResource("3_nna42")
+surface_material_override/0 = ExtResource("3_hl0r6")
 
 [node name="AnimationPlayer" parent="." index="1"]
 libraries = {

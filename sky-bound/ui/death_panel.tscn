@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnuauhdk3wndg"]
+
+[ext_resource type="Script" uid="uid://dbvgvmyex1kdf" path="res://Scripts/death_panel.gd" id="1_ksgpu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fbudd"]
+font_size = 50
+
+[node name="DeathPanel" type="CanvasLayer"]
+script = ExtResource("1_ksgpu")
+
+[node name="Control" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="."]
+offset_left = 322.0
+offset_top = 328.0
+offset_right = 1645.0
+offset_bottom = 440.0
+text = "FINAL SCORE: "
+label_settings = SubResource("LabelSettings_fbudd")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Retry" type="Button" parent="."]
+offset_left = 694.0
+offset_top = 535.0
+offset_right = 871.0
+offset_bottom = 655.0
+text = "RETRY"
+
+[node name="Quit" type="Button" parent="."]
+offset_left = 1093.0
+offset_top = 532.0
+offset_right = 1270.0
+offset_bottom = 652.0
+text = "QUIT"

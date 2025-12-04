@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cptts8oobi5tx"]
+[gd_scene load_steps=15 format=3 uid="uid://cptts8oobi5tx"]
 
 [ext_resource type="Texture2D" uid="uid://bos7rridjkps1" path="res://Assets/level/checkboard.png" id="1_vdcyi"]
 [ext_resource type="Script" uid="uid://biculg45p8gkf" path="res://Scripts/game.gd" id="1_wspvq"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dess7tva0hmaa" path="res://Scenes/player.tscn" id="4_8l27e"]
 [ext_resource type="AudioStream" uid="uid://slrssepful0f" path="res://Assets/Music/Wav/Ambient 10.wav" id="5_l4jf6"]
 [ext_resource type="Script" uid="uid://5xd0ag7m42q5" path="res://Scripts/multiplayer_spawner.gd" id="6_l4jf6"]
+[ext_resource type="Script" uid="uid://b0rxyp4tnypng" path="res://Character/Scene/Lost_panel.gd" id="7_d3sah"]
 
 [sub_resource type="Environment" id="Environment_jas5e"]
 background_mode = 1
@@ -50,6 +51,9 @@ uv1_triplanar = true
 uv1_triplanar_sharpness = 4.0
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_vdcyi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uips6"]
+font_size = 50
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_wspvq")
@@ -163,6 +167,46 @@ spawn_limit = 5
 script = ExtResource("6_l4jf6")
 network_player = ExtResource("4_8l27e")
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="DeathPanel" type="Panel" parent="CanvasLayer"]
+process_mode = 3
+offset_right = 1918.0
+offset_bottom = 1075.0
+script = ExtResource("7_d3sah")
+
+[node name="FinalScoreLabel" type="Label" parent="CanvasLayer/DeathPanel"]
+layout_mode = 0
+offset_left = 322.0
+offset_top = 328.0
+offset_right = 1645.0
+offset_bottom = 440.0
+text = "FINAL SCORE: "
+label_settings = SubResource("LabelSettings_uips6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Retry" type="Button" parent="CanvasLayer/DeathPanel"]
+layout_mode = 0
+offset_left = 694.0
+offset_top = 535.0
+offset_right = 871.0
+offset_bottom = 655.0
+text = "RETRY"
+
+[node name="Quit" type="Button" parent="CanvasLayer/DeathPanel"]
+layout_mode = 0
+offset_left = 1093.0
+offset_top = 532.0
+offset_right = 1270.0
+offset_bottom = 652.0
+text = "QUIT"
+
+[connection signal="boss_mob_spawned" from="MobSpawner3D" to="." method="_on_boss_mob_spawner_3d_mob_spawned"]
 [connection signal="mob_spawned" from="MobSpawner3D" to="." method="_on_mob_spawner_3d_mob_spawned"]
+[connection signal="boss_mob_spawned" from="MobSpawner3D2" to="." method="_on_boss_mob_spawner_3d_mob_spawned"]
 [connection signal="mob_spawned" from="MobSpawner3D2" to="." method="_on_mob_spawner_3d_mob_spawned"]
 [connection signal="body_entered" from="Killplane" to="." method="_on_killplane_body_entered"]
+[connection signal="button_down" from="CanvasLayer/DeathPanel/Retry" to="CanvasLayer/DeathPanel" method="_on_retry_button_pressed"]
+[connection signal="button_down" from="CanvasLayer/DeathPanel/Quit" to="CanvasLayer/DeathPanel" method="_on_quit_button_pressed"]

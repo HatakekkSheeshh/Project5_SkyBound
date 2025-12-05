@@ -2,11 +2,14 @@ extends Node
 
 signal connected
 
-const IP_ADDR: String = "172.23.192.1"
+var ip_addr: String = "localhost"
 const PORT:int = 42069
 
 var peer: ENetMultiplayerPeer
 var is_multiplayer := false
+
+func set_ip(addr: String) -> void:
+	ip_addr = addr.strip_edges()
 
 func start_server() -> void:
 	is_multiplayer = true
@@ -17,7 +20,7 @@ func start_server() -> void:
 func start_client() -> void:
 	is_multiplayer = true
 	peer = ENetMultiplayerPeer.new()
-	peer.create_client(IP_ADDR, PORT)
+	peer.create_client(ip_addr, PORT)
 	multiplayer.multiplayer_peer = peer 
 	multiplayer.connected_to_server.connect(_on_connected)
 	multiplayer.connection_failed.connect(_on_connection_failed)

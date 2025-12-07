@@ -64,6 +64,7 @@ func _on_peer_disconnected(id: int) -> void:
 	_check_all_ready()  
 
 func _on_back_lb_pressed() -> void:
+	NetworkConnection.close_server()
 	get_tree().change_scene_to_file("res://ui/menu.tscn")
 
 @rpc("any_peer", "call_local", "reliable")

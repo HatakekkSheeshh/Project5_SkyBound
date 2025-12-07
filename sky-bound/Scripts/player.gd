@@ -35,6 +35,7 @@ func _ready() -> void:
 			_apply_spawn_position(spawn_position)
 
 func _apply_spawn_position(spawn_pos: Vector3) -> void:
+	print("Applying spawn position ", spawn_pos, "for ", name)
 	if spawn_pos == Vector3.ZERO:
 		return
 	

@@ -1,5 +1,6 @@
 extends Control
 @onready var le_input: LineEdit = $ip_address_enter
+@onready var lep_input: LineEdit = $port_enter
 @onready var lb_alert: Label = $alert
 
 func _ready() -> void:
@@ -21,20 +22,22 @@ func _on_back_pressed() -> void:
 
 func _on_ip_address_enter_text_submitted(new_text: String) -> void:
 	lb_alert.visible = true 
-	lb_alert.text = "Connecting to %s" % le_input.text
+	lb_alert.text = "Connecting to %s with port: %d" % [le_input.text, lep_input.text.to_int()]
 	
 	NetworkConnection.set_ip(new_text)
+	NetworkConnection.set_port(lep_input.text.to_int())
 
 func _on_take_df_ip_pressed() -> void:
 	var default_ip: String = get_default_ipv4()
 	le_input.text = default_ip
 	
 func _on_submit_pressed() -> void:
-	if le_input.text != "" or le_input.text:
+	if (le_input.text != "" or le_input.text) or (lep_input.text != "" or lep_input.text):
 		lb_alert.visible = true 
-		lb_alert.text = "Connecting to %s" % le_input.text
+		lb_alert.text = "Connecting to %s with port: %d" % [le_input.text, lep_input.text.to_int()]
 		
 	NetworkConnection.set_ip(le_input.text)
+	NetworkConnection.set_port(lep_input.text.to_int())
 
 func get_default_ipv4() -> String:
 	var candidates: Array[String] = []
@@ -50,3 +53,7 @@ func get_default_ipv4() -> String:
 	if candidates.size() > 0:
 		return candidates[0]
 	return "127.0.0.1"
+
+
+func _on_port_enter_text_submitted(new_text: String) -> void:
+	pass # Replace with function body.

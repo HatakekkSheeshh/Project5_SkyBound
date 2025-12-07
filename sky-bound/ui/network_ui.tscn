@@ -89,18 +89,30 @@ text = "Back
 
 [node name="ip_address_enter" type="LineEdit" parent="."]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.142
 anchor_right = 0.5
-anchor_bottom = 0.142
-offset_left = -540.0
-offset_top = -35.36
-offset_right = 544.0
-offset_bottom = 60.64
+offset_left = -542.0
+offset_top = 23.0
+offset_right = 542.0
+offset_bottom = 119.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 64
 placeholder_text = "ENTER IP ADDRESS"
+alignment = 1
+
+[node name="port_enter" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -538.0
+offset_top = 136.0
+offset_right = 546.0
+offset_bottom = 232.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 64
+placeholder_text = "ENTER PORT"
 alignment = 1
 
 [node name="take_df_ip" type="Button" parent="."]
@@ -162,5 +174,6 @@ horizontal_alignment = 1
 [connection signal="pressed" from="VBoxContainer/client" to="." method="_on_client_pressed"]
 [connection signal="pressed" from="VBoxContainer/back" to="." method="_on_back_pressed"]
 [connection signal="text_submitted" from="ip_address_enter" to="." method="_on_ip_address_enter_text_submitted"]
+[connection signal="text_submitted" from="port_enter" to="." method="_on_port_enter_text_submitted"]
 [connection signal="pressed" from="take_df_ip" to="." method="_on_take_df_ip_pressed"]
 [connection signal="pressed" from="submit" to="." method="_on_submit_pressed"]

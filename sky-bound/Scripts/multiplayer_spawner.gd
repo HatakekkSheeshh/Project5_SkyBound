@@ -50,7 +50,8 @@ func _initialize_spawner() -> void:
 		for player_id in spawned_players.keys():
 			var spawn_index = spawned_players[player_id]
 			print("Spawn index: ", spawn_index)
-			var spawn_position = Vector3(spawn_index * spawn_offset_x, 0, 0)
+			var base_position = Vector3(1, 0, 0)
+			var spawn_position = base_position + Vector3(spawn_index * spawn_offset_x, 0, 0)
 			
 			print("Spawn position for ", spawn_index, ": ", spawn_position)
 			

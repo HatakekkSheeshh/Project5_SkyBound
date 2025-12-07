@@ -4,7 +4,7 @@ extends MultiplayerSpawner
 @export var spawn_offset_x: float = 5.0
 
 var spawn_point: Node = null
-var spawned_players: Dictionary = {}  # player_id -> position
+var spawned_players: Dictionary = {}
 
 func _ready() -> void:
 	spawned.connect(_on_player_spawned)
@@ -16,7 +16,6 @@ func _ready() -> void:
 
 func _on_player_spawned(node: Node) -> void:
 	if node and node.is_in_group("players"):
-		# Wait for RPC to set position, or use already set spawn_position
 		if node.spawn_position != Vector3.ZERO:
 			node.call_deferred("_apply_spawn_position", node.spawn_position)
 			if node.is_multiplayer_authority():
@@ -24,10 +23,6 @@ func _on_player_spawned(node: Node) -> void:
 
 func _initialize_spawn_point() -> void:
 	spawn_point = $"../SpawnPoint"
-	if spawn_point == null:
-		print("[SPAWNER] ERROR: SpawnPoint not found!")
-	else:
-		print("[SPAWNER] SpawnPoint at position: ", spawn_point.global_position)
 
 func _initialize_spawner() -> void:
 	if not multiplayer.multiplayer_peer:
@@ -82,7 +77,6 @@ func spawn_player(id: int) -> void:
 	if spawn_point == null:
 		return
 	
-	# STEP 1: Move all existing players to create space
 	var base_position = spawn_point.global_position
 	var existing_players = spawned_players.duplicate()
 	
@@ -90,17 +84,14 @@ func spawn_player(id: int) -> void:
 		var player_index = _get_player_index(existing_id)
 		var new_position = base_position + Vector3((player_index + 1) * spawn_offset_x, 0, 0)
 		
-		# Update stored position
 		spawned_players[existing_id] = new_position
 		
-		# Move the actual player node
 		var player_node = _find_player_node(existing_id)
 		if player_node:
 			player_node.spawn_position = new_position
 			player_node.call_deferred("_apply_spawn_position", new_position)
 			_sync_spawn_position(existing_id, new_position)
 	
-	# STEP 2: Spawn new player at base position
 	spawned_players[id] = base_position
 	
 	var player: Node = network_player.instantiate()

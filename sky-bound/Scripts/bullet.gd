@@ -4,7 +4,7 @@ const SPEED = 30.0
 const RANGE = 60.0
 
 var travelled_distance = 0.0
-
+var shooter_id: int = -1
 
 func _physics_process(delta: float) -> void:
 	position += transform.basis.z * SPEED * delta
@@ -13,9 +13,7 @@ func _physics_process(delta: float) -> void:
 	if travelled_distance > RANGE:
 		queue_free()
 
-
 func _on_body_entered(body: Node3D) -> void:
 	queue_free()
 	if body.has_method("take_damage"):
-		body.take_damage()
-		
+		body.take_damage(shooter_id)

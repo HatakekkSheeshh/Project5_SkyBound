@@ -21,6 +21,7 @@ func _ready() -> void:
 	death_panel.hide()
 	if multiplayer.is_server() and multiplayer.multiplayer_peer:
 		_setup_server_observer_camera()
+		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
 	if NetworkConnection.is_multiplayer:
 		_initialize_player_scores()
@@ -181,12 +182,18 @@ func _player_quitting(peer_id: int) -> void:
 				peer.close()
 	
 	var remaining_players = []
+	var active_peers: Array = []
+	if multiplayer.has_multiplayer_peer():
+		active_peers = multiplayer.get_peers()
 	for pid in player_scores.keys():
-		if pid != 1:
+		if pid != 1 and pid in active_peers:
 			remaining_players.append(pid)
 	
 	if remaining_players.size() > 0:
-		var ready_count = players_ready_to_retry.size()
+		var ready_count = 0
+		for player_id in remaining_players:
+			if player_id in players_ready_to_retry and players_ready_to_retry[player_id]:
+				ready_count += 1
 		var total_count = remaining_players.size()
 		rpc("_update_retry_status", ready_count, total_count)
 		
@@ -201,6 +208,57 @@ func _player_quitting(peer_id: int) -> void:
 			await get_tree().process_frame
 			rpc("_restart_game")
 			call_deferred("_restart_game")
+	else:
+		_handle_all_players_quit()
+
+func _handle_all_players_quit() -> void:
+	if is_instance_valid(death_panel):
+		death_panel.hide()
+	
+	var tree = get_tree()
+	if is_instance_valid(tree):
+		tree.paused = false
+	
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
+	
+	await get_tree().process_frame
+	call_deferred("_go_to_menu")
+
+func _go_to_menu() -> void:
+	var tree = get_tree()
+	if is_instance_valid(tree):
+		tree.change_scene_to_file("res://ui/menu.tscn")
+
+func _on_peer_disconnected(peer_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	
+	if peer_id in player_scores:
+		player_scores.erase(peer_id)
+	if peer_id in player_names:
+		player_names.erase(peer_id)
+	if peer_id in players_ready_to_retry:
+		players_ready_to_retry.erase(peer_id)
+	
+	var remaining_players = []
+	var active_peers: Array = []
+	if multiplayer.has_multiplayer_peer():
+		active_peers = multiplayer.get_peers()
+	for pid in player_scores.keys():
+		if pid != 1 and pid in active_peers:
+			remaining_players.append(pid)
+	
+	if remaining_players.size() == 0:
+		_handle_all_players_quit()
+	else:
+		var ready_count = 0
+		for player_id in remaining_players:
+			if player_id in players_ready_to_retry and players_ready_to_retry[player_id]:
+				ready_count += 1
+		var total_count = remaining_players.size()
+		rpc("_update_retry_status", ready_count, total_count)
 
 @rpc("any_peer", "call_local", "reliable")
 func _player_ready_to_retry(peer_id: int) -> void:
@@ -254,7 +312,11 @@ func _update_local_retry_button_text() -> void:
 		if peer_id_key != 1:
 			players_in_game.append(peer_id_key)
 	
-	var ready_count = players_ready_to_retry.size()
+	var ready_count = 0
+	for player_id in players_in_game:
+		if player_id in players_ready_to_retry and players_ready_to_retry[player_id]:
+			ready_count += 1
+	
 	var total_count = players_in_game.size()
 	
 	if ready_count < total_count and total_count > 0:
@@ -282,6 +344,19 @@ func _update_retry_status(ready_count: int, total_count: int) -> void:
 	var retry_button = _find_retry_button()
 	if not retry_button:
 		return
+	
+	var players_in_game = []
+	for peer_id_key in player_scores.keys():
+		if peer_id_key != 1:
+			players_in_game.append(peer_id_key)
+	
+	var players_to_remove = []
+	for ready_player_id in players_ready_to_retry.keys():
+		if ready_player_id not in players_in_game:
+			players_to_remove.append(ready_player_id)
+	
+	for player_id in players_to_remove:
+		players_ready_to_retry.erase(player_id)
 	
 	if ready_count < total_count and total_count > 0:
 		retry_button.text = "RETRY (%d/%d)" % [ready_count, total_count]

@@ -1,0 +1,248 @@
+[gd_scene load_steps=10 format=3 uid="uid://dcj6ll085i11t"]
+
+[ext_resource type="Script" uid="uid://dtipg4hduak8f" path="res://Scripts/waiting.gd" id="1_6yaqv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u6e65"]
+bg_color = Color(0.7204674, 0.72046757, 0.7204672, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_68pjt"]
+bg_color = Color(0.6, 0.6, 0.6, 0.8235294)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uqa8k"]
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8hdo"]
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Animation" id="Animation_44t8v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("waiting_lb:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Waiting Room
+"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("server_lb:text")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Server running"]
+}
+
+[sub_resource type="Animation" id="Animation_2wugb"]
+resource_name = "new_animation"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("waiting_lb:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0010410566, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["Waiting Room
+", "Waiting Room.
+", "Waiting Room..
+", "Waiting Room...
+"]
+}
+
+[sub_resource type="Animation" id="Animation_6yaqv"]
+resource_name = "server_run_anime"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("server_lb:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["Server running", "Server running.", "Server running..", "Server running..."]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nib0m"]
+_data = {
+&"RESET": SubResource("Animation_44t8v"),
+&"new_animation": SubResource("Animation_2wugb"),
+&"server_run_anime": SubResource("Animation_6yaqv")
+}
+
+[node name="Waiting" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6yaqv")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1079.0
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.546
+anchor_right = 0.5
+anchor_bottom = 0.546
+offset_left = -444.0
+offset_top = -403.68
+offset_right = 444.0
+offset_bottom = 403.32
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="waiting_lb" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -216.0
+offset_right = 216.0
+offset_bottom = 179.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 64
+text = "Waiting Room
+"
+
+[node name="ready_lb" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1647.0
+offset_top = 957.0
+offset_right = 1884.0
+offset_bottom = 1047.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_u6e65")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_68pjt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uqa8k")
+theme_override_styles/focus = SubResource("StyleBoxFlat_t8hdo")
+text = "Ready"
+
+[node name="back_lb" type="Button" parent="."]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 957.0
+offset_right = 274.0
+offset_bottom = 1047.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_u6e65")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_68pjt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uqa8k")
+theme_override_styles/focus = SubResource("StyleBoxFlat_t8hdo")
+text = "Back"
+
+[node name="cur_pla_lb" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.117000006
+anchor_right = 0.5
+anchor_bottom = 0.117000006
+offset_left = -214.0
+offset_top = 3.6399918
+offset_right = 214.0
+offset_bottom = 48.63999
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Current players waiting: 0/4"
+horizontal_alignment = 1
+
+[node name="waiting_animation" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_nib0m")
+}
+playback_auto_capture_transition_type = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 515.0
+offset_top = 180.0
+offset_right = 1406.0
+offset_bottom = 1002.0
+
+[node name="peer" type="Label" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Player 1"
+
+[node name="server_lb" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -246.5
+offset_right = 246.5
+offset_bottom = 88.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.09019608, 1, 0, 1)
+theme_override_font_sizes/font_size = 64
+text = "Server running"
+horizontal_alignment = 1
+
+[node name="ip_addr_lb" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.12200001
+anchor_right = 0.5
+anchor_bottom = 0.12200001
+offset_left = -204.0
+offset_top = -34.76001
+offset_right = 204.0
+offset_bottom = 34.23999
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "Current IP: 192.168.0.0"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="ready_lb" to="." method="_on_ready_lb_pressed"]
+[connection signal="pressed" from="back_lb" to="." method="_on_back_lb_pressed"]

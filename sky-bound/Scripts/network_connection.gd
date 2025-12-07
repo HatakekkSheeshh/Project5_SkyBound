@@ -26,8 +26,7 @@ func start_client() -> void:
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	
 func _on_connected():
-	print(">>> NetworkConnection: connected_to_server fired")
 	emit_signal("connected")	
 
 func _on_connection_failed():
-	print(">>> NetworkConnection: connection_failed")
+	pass

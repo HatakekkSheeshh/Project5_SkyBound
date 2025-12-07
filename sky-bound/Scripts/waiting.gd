@@ -3,13 +3,12 @@ extends Control
 @onready var list_box := $VBoxContainer
 @onready var peer_template := $VBoxContainer/peer
 @onready var cur_pla_lb := $cur_pla_lb
-@onready var red_pla_lb := $red_pla_lb
 @onready var animation := $waiting_animation
 @onready var ip_addr := $ip_addr_lb
 
-var peer_labels: = {} # id -> Label
-var ready_peers: = {} # id -> bool
-var peer_id_to_display: = {} # real_id -> display_number (1, 2, 3...)
+var peer_labels: = {}
+var ready_peers: = {}
+var peer_id_to_display: = {}
 var next_display_number: int = 1
 
 func _ready() -> void:
@@ -40,13 +39,11 @@ func _request_peer_list() -> void:
 			display_num += 1
 		rpc_id(requester_id, "_add_peer_label", peer_id, peer_id_to_display[peer_id])
 		
-		# Sync ready state
 		if ready_peers.get(peer_id, false):
 			rpc_id(requester_id, "_set_peer_ready", peer_id, true, peer_id_to_display[peer_id])
 	rpc_id(requester_id, "_refresh_count")
 
 func _on_peer_connected(id: int) -> void:
-	print("[WAITING] Peer connected with ID: ", id, " (type: ", typeof(id), ")")
 	if id not in peer_id_to_display:
 		peer_id_to_display[id] = next_display_number
 		next_display_number += 1
@@ -81,7 +78,6 @@ func _add_peer_label(id: int, display_num: int = -1) -> void:
 			next_display_number += 1
 		display_num = peer_id_to_display[id]
 	
-	print("[WAITING] Adding peer label for ID: ", id, " -> Display: Player ", display_num)
 	var lb := peer_template.duplicate()
 	lb.visible = true
 	lb.text = "Player %d" % display_num
@@ -102,15 +98,6 @@ func _refresh_count() -> void:
 	var count := peer_labels.size()
 	if cur_pla_lb:
 		cur_pla_lb.text = "Current players waiting: %d/4" % count
-	_update_ready_count()
-
-func _update_ready_count() -> void:
-	if red_pla_lb:
-		var ready_count = 0
-		for peer_id in ready_peers:
-			if ready_peers[peer_id]:
-				ready_count += 1
-		red_pla_lb.text = "Ready Players: %d/%d" % [ready_count, peer_labels.size()]
 		
 func _on_ready_lb_pressed() -> void:
 	if multiplayer.is_server():
@@ -131,7 +118,6 @@ func _receive_ready(peer_id: int) -> void:
 	if !multiplayer.is_server():
 		return
 	
-	# Ensure display_num exists
 	if peer_id not in peer_id_to_display:
 		peer_id_to_display[peer_id] = next_display_number
 		next_display_number += 1
@@ -145,18 +131,15 @@ func _receive_ready(peer_id: int) -> void:
 func _set_peer_ready(peer_id: int, is_ready: bool, display_num: int = -1) -> void:
 	ready_peers[peer_id] = is_ready
 	
-	# Sync display_num if provided
 	if display_num != -1 and peer_id not in peer_id_to_display:
 		peer_id_to_display[peer_id] = display_num
 	
 	_update_peer_label_ready(peer_id, is_ready)
-	_update_ready_count()
 
 func _update_peer_label_ready(peer_id: int, is_ready: bool) -> void:
 	if !peer_labels.has(peer_id):
 		return
 	
-	# Ensure display_num exists in mapping
 	if peer_id not in peer_id_to_display:
 		peer_id_to_display[peer_id] = next_display_number
 		next_display_number += 1
@@ -175,7 +158,6 @@ func _check_all_ready() -> void:
 		return
 	
 	var all_peers = []
-	# all_peers.append(multiplayer.get_unique_id())  # add server
 	for peer_id in multiplayer.get_peers():
 		all_peers.append(peer_id)
 	
@@ -186,17 +168,13 @@ func _check_all_ready() -> void:
 			break
 	
 	if all_ready and all_peers.size() > 0:
-		print("[WAITING] All ready! Server calling _go_to_game")
 		rpc("_go_to_game")
 
 @rpc("any_peer", "call_local", "reliable")
 func _go_to_game() -> void:
 	if multiplayer.multiplayer_peer:
-		print("[WAITING] _go_to_game called - is_server: ", multiplayer.is_server())
-	else:
-		print("[WAITING] _go_to_game called - NO MULTIPLAYER PEER")
+		pass
 	var timer = get_tree().create_timer(0.5)
 	timer.timeout.connect(func():
-		print("[WAITING] Changing scene to main.tscn")
 		get_tree().change_scene_to_file("res://Character/Scene/main.tscn")
 	)

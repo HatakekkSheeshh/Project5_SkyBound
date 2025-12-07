@@ -24,16 +24,13 @@ func _ready() -> void:
 	if is_multiplayer_authority():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
-		# Apply spawn position if set
 		if spawn_position != Vector3.ZERO:
 			_apply_spawn_position(spawn_position)
 		
-		# Set camera after a delay to ensure server observer camera doesn't override
 		call_deferred("_set_camera_delayed")
 	else:
 		_set_camera_current(false)
 		
-		# Apply spawn position if set
 		if spawn_position != Vector3.ZERO:
 			_apply_spawn_position(spawn_position)
 
@@ -47,7 +44,6 @@ func _apply_spawn_position(spawn_pos: Vector3) -> void:
 	synced_position = spawn_pos
 	spawn_position = spawn_pos
 	
-	# Force position update in next physics frame to prevent physics from moving player
 	await get_tree().physics_frame
 	velocity = Vector3.ZERO
 	global_position = spawn_pos
@@ -55,11 +51,8 @@ func _apply_spawn_position(spawn_pos: Vector3) -> void:
 func _set_camera_current(value: bool) -> void:
 	if camera:
 		camera.current = value
-		if value:
-			print("[PLAYER] Camera set to current for player: ", name)
 
 func _set_camera_delayed() -> void:
-	# Wait a frame to ensure server observer camera doesn't override
 	await get_tree().process_frame
 	_set_camera_current(true)
 
@@ -71,7 +64,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
-		# Only process physics if spawn position is set
 		if spawn_position == Vector3.ZERO:
 			return
 		
@@ -124,6 +116,8 @@ func process_gravity(delta) -> void:
 
 func shoot_bullet() -> void:
 	var new_bullet: Area3D = BULLET.instantiate()
+	var player_id = name.to_int()
+	new_bullet.shooter_id = player_id
 	%Marker3D.add_child(new_bullet)
 	new_bullet.global_transform = %Marker3D.global_transform
 	audio_stream_player.play()

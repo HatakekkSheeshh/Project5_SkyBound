@@ -12,8 +12,9 @@ var health= 1
 var speed= randf_range(2.0,4.0)
 
 
-func _physics_process(delta) -> void:
-	player = get_player()
+func _physics_process(_delta) -> void:
+	if not player:
+		player = get_player()
 	if player == null: return
 	
 	var dir = global_position.direction_to(player.global_position)

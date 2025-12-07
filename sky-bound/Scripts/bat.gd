@@ -8,7 +8,7 @@ var player = null
 
 signal died
 
-var health= 3
+var health= 1
 var speed= randf_range(2.0,4.0)
 
 

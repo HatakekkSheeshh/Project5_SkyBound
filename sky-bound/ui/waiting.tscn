@@ -244,5 +244,10 @@ theme_override_font_sizes/font_size = 32
 text = "Current IP: 192.168.0.0"
 horizontal_alignment = 1
 
+[node name="red_pla_lb" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
 [connection signal="pressed" from="ready_lb" to="." method="_on_ready_lb_pressed"]
 [connection signal="pressed" from="back_lb" to="." method="_on_back_lb_pressed"]

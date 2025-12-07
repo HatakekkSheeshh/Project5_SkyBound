@@ -47,6 +47,6 @@ func get_player():
 	var players = get_tree().get_nodes_in_group("players")
 	if players.size() > 0:
 		var random_index = randi() % players.size()
-		print("[BAT]")
+		# print("[BAT] number: ", str(random_index))
 		return players[random_index]
 	return null

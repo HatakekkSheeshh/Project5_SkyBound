@@ -5,36 +5,62 @@ extends CharacterBody3D
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 @export var synced_position: Vector3
+var spawn_position: Vector3 = Vector3.ZERO
 
 const BULLET = preload("uid://bm1y0p1m7eepn")
 
 const MOUSE_SEN_SCALE = 0.2
 const CAMERA_MAX_UP = 90
 const CAMERA_MAX_DOWN = -80
-const SPEED = 5 # m/s
+const SPEED = 5
 
 func _enter_tree() -> void:
 	var authority_id = name.to_int()
 	set_multiplayer_authority(authority_id)
-	print("[PLAYER] _enter_tree - name: ", name, ", authority_id: ", authority_id, ", my_unique_id: ", multiplayer.get_unique_id())
 
 func _ready() -> void:
 	add_to_group("players")
 	
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if is_multiplayer_authority():
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		
+		# Apply spawn position if set
+		if spawn_position != Vector3.ZERO:
+			_apply_spawn_position(spawn_position)
+		
+		# Set camera after a delay to ensure server observer camera doesn't override
+		call_deferred("_set_camera_delayed")
+	else:
+		_set_camera_current(false)
+		
+		# Apply spawn position if set
+		if spawn_position != Vector3.ZERO:
+			_apply_spawn_position(spawn_position)
+
+func _apply_spawn_position(spawn_pos: Vector3) -> void:
+	if spawn_pos == Vector3.ZERO:
+		return
 	
-	var my_id = multiplayer.get_unique_id()
-	var authority_id = name.to_int()
-	var has_authority = is_multiplayer_authority()
+	velocity = Vector3.ZERO
+	global_position = spawn_pos
+	synced_position = spawn_pos
+	spawn_position = spawn_pos
 	
-	print("[PLAYER] _ready - name: ", name, ", my_id: ", my_id, ", authority_id: ", authority_id, ", has_authority: ", has_authority)
-	
-	if has_authority:
-		camera.current = true
-		print("[PLAYER] Camera set to current for player: ", name)
-	else: 
-		camera.current = false
-		print("[PLAYER] Camera NOT set for player: ", name)
+	# Force position update in next physics frame to prevent physics from moving player
+	await get_tree().physics_frame
+	velocity = Vector3.ZERO
+	global_position = spawn_pos
+
+func _set_camera_current(value: bool) -> void:
+	if camera:
+		camera.current = value
+		if value:
+			print("[PLAYER] Camera set to current for player: ", name)
+
+func _set_camera_delayed() -> void:
+	# Wait a frame to ensure server observer camera doesn't override
+	await get_tree().process_frame
+	_set_camera_current(true)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -44,9 +70,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
-		process_gravity(delta)
+		# Only process physics if spawn position is set
+		if spawn_position == Vector3.ZERO:
+			return
 		
+		process_gravity(delta)
 		handle_move_input()
+		
 		if Input.is_action_just_pressed("jump") and is_on_floor():
 			handle_jumping()
 		elif Input.is_action_just_released("jump") and velocity.y > 0:
@@ -56,12 +86,14 @@ func _physics_process(delta: float) -> void:
 			shoot_bullet()
 		
 		move_and_slide()
-		
 		synced_position = global_position
-		rpc("_update_position", synced_position)
-	else:
-		global_position = synced_position
 		
+		var player_id = name.to_int()
+		rpc("_update_position", player_id, synced_position)
+	else:
+		if synced_position != Vector3.ZERO:
+			global_position = synced_position
+
 func move_camera(event) -> void:
 	if not is_multiplayer_authority():
 		return
@@ -92,10 +124,11 @@ func process_gravity(delta) -> void:
 func shoot_bullet() -> void:
 	var new_bullet: Area3D = BULLET.instantiate()
 	%Marker3D.add_child(new_bullet)
-	
 	new_bullet.global_transform = %Marker3D.global_transform
 	audio_stream_player.play()
 
 @rpc("any_peer", "call_local", "unreliable")
-func _update_position(new_pos: Vector3) -> void:
-	synced_position = new_pos
+func _update_position(player_id: int, new_pos: Vector3) -> void:
+	var my_id = name.to_int()
+	if player_id == my_id and not is_multiplayer_authority():
+		synced_position = new_pos

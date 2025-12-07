@@ -1,6 +1,5 @@
 extends RigidBody3D
 @onready var bat_model: Node3D = $bat_model
-# @onready var player = get_parent().get_parent().get_node("Player") #Add player's node
 var player = null
 @onready var timer: Timer = $Timer
 @onready var hurt_sound: AudioStreamPlayer3D = $HurtSound
@@ -10,16 +9,39 @@ signal died
 
 var health= 3
 var speed= randf_range(2.0,4.0)
+var target_switch_timer: float = 0.0
+var target_switch_interval: float = 3.0  # Switch target every 3 seconds
 
+func _ready() -> void:
+	_select_random_player()
 
 func _physics_process(delta) -> void:
-	player = get_player()
-	if player == null: return
+	# Check if we need to switch target
+	target_switch_timer += delta
+	if target_switch_timer >= target_switch_interval:
+		target_switch_timer = 0.0
+		_select_random_player()
+	
+	# If current target is invalid, find a new one
+	if player == null or not is_instance_valid(player) or not player.is_in_group("players"):
+		_select_random_player()
+	
+	if player == null: 
+		return
 	
 	var dir = global_position.direction_to(player.global_position)
 	dir.y=0.0
 	linear_velocity = dir*speed
 	bat_model.rotation.y = Vector3.FORWARD.signed_angle_to(dir, Vector3.UP) + PI
+
+func _select_random_player() -> void:
+	var players = get_tree().get_nodes_in_group("players")
+	if players.size() == 0:
+		player = null
+		return
+	
+	var random_index = randi() % players.size()
+	player = players[random_index]
 
 func take_damage():
 	if player == null: return
@@ -42,11 +64,3 @@ func take_damage():
 func _on_timer_timeout():
 	queue_free()
 	died.emit()
-	
-func get_player():
-	var players = get_tree().get_nodes_in_group("players")
-	if players.size() > 0:
-		var random_index = randi() % players.size()
-		# print("[BAT] number: ", str(random_index))
-		return players[random_index]
-	return null

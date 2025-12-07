@@ -26,11 +26,6 @@ func _spawn_mob_on_all_clients(spawn_pos: Vector3) -> void:
 	new_mob.global_position = spawn_pos
 	mob_spawned.emit(new_mob)
 	
-	if boss_mob_to_spawn and randf() < boss_bat_spawn_chance:
-		var new_boss_mob = boss_mob_to_spawn.instantiate()
-		add_child(new_boss_mob)
-		new_boss_mob.global_position = spawn_pos
-		boss_mob_spawned.emit(new_boss_mob)
 
 func _on_timer_2_timeout() -> void:
 	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():

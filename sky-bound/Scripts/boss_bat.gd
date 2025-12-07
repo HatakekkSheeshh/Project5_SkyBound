@@ -7,7 +7,7 @@ var player = null
 
 signal died(killer_id: int)
 
-var health= 10
+var health= 5
 var speed= randf_range(2.0,3.0)
 var killer_id: int = -1
 

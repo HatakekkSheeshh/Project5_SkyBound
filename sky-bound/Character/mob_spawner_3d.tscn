@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dti8ibxix1tke"]
 
 [ext_resource type="Script" uid="uid://cymg35weskqim" path="res://Scripts/mob_spawner_3d.gd" id="1_fi7xd"]
-[ext_resource type="PackedScene" uid="uid://c1vg0yntw7eyf" path="res://Character/bat.tscn" id="2_caxdb"]
+[ext_resource type="PackedScene" uid="uid://bcsaol1wmymtx" path="res://Character/bat.tscn" id="2_caxdb"]
 [ext_resource type="PackedScene" uid="uid://b0h60dofcvbfc" path="res://Character/boss_bat.tscn" id="3_i1hj5"]
 [ext_resource type="PackedScene" uid="uid://bw2m6rpraye2r" path="res://Assets/mob/spawner/spawner_model.glb" id="3_l2r5n"]
 

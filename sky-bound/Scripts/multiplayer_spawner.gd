@@ -1,123 +1,166 @@
 extends MultiplayerSpawner
 
 @export var network_player: PackedScene
+@export var spawn_offset_x: float = 5.0
+
+var spawn_point: Node = null
+var spawned_players: Dictionary = {}  # player_id -> position
 
 func _ready() -> void:
+	spawned.connect(_on_player_spawned)
+	spawned_players.clear()
+	
 	await get_tree().process_frame
+	_initialize_spawn_point()
 	_initialize_spawner()
 
-func _initialize_spawner() -> void:
-	# single mode
-	print("[SPAWNER] _ready - network_player =", network_player)
-	print("[SPAWNER] is_multiplayer =", NetworkConnection.is_multiplayer)
-	print("[SPAWNER] multiplayer_peer exists =", multiplayer.multiplayer_peer != null)
-	
-	if multiplayer.multiplayer_peer:
-		print("[SPAWNER] multiplayer.is_server() =", multiplayer.is_server())
-		print("[SPAWNER] get_unique_id() =", multiplayer.get_unique_id())
+func _on_player_spawned(node: Node) -> void:
+	if node and node.is_in_group("players"):
+		# Wait for RPC to set position, or use already set spawn_position
+		if node.spawn_position != Vector3.ZERO:
+			node.call_deferred("_apply_spawn_position", node.spawn_position)
+			if node.is_multiplayer_authority():
+				node.call_deferred("_set_camera_delayed")
+
+func _initialize_spawn_point() -> void:
+	spawn_point = $"../SpawnPoint"
+	if spawn_point == null:
+		print("[SPAWNER] ERROR: SpawnPoint not found!")
 	else:
-		print("[SPAWNER] NO MULTIPLAYER PEER - waiting...")
+		print("[SPAWNER] SpawnPoint at position: ", spawn_point.global_position)
+
+func _initialize_spawner() -> void:
+	if not multiplayer.multiplayer_peer:
 		await get_tree().create_timer(0.1).timeout
-		if multiplayer.multiplayer_peer:
-			print("[SPAWNER] Multiplayer peer found after delay")
-		else:
-			print("[SPAWNER] Still no multiplayer peer!")
+		if not multiplayer.multiplayer_peer:
 			return
 	
-	if  NetworkConnection.is_multiplayer == false:
-		print("[SPAWNER] Running in Single Player mode")
+	if not NetworkConnection.is_multiplayer:
 		_spawn_single_player()
 		return
 	
-	# multi mode
 	if multiplayer.is_server():
-		print("[SPAWNER] Server mode - connecting signals")
 		multiplayer.peer_connected.connect(_on_peer_connected_spawn)
-		var server_id = multiplayer.get_unique_id()
-		print("[SPAWNER] Server unique_id =", server_id, " - Server will observe only, no player spawn")
-		
 		rpc("_request_client_id")
 		
 		for peer_id in multiplayer.get_peers():
-			print("[SPAWNER] Spawning peer from get_peers(): ", peer_id)
 			spawn_player(peer_id)
 	else:
-		var client_id = multiplayer.get_unique_id()
-		print("[SPAWNER] Client mode - unique_id =", client_id)
-		rpc_id(1, "_receive_client_id", client_id)
+		rpc_id(1, "_receive_client_id", multiplayer.get_unique_id())
 
 func _on_peer_connected_spawn(id: int) -> void:
 	rpc_id(id, "_request_client_id")
 
 @rpc("any_peer", "call_local", "unreliable")
 func _request_client_id() -> void:
-	if !multiplayer.is_server():
+	if not multiplayer.is_server():
 		rpc_id(1, "_receive_client_id", multiplayer.get_unique_id())
 
 @rpc("any_peer", "call_local", "unreliable")
 func _receive_client_id(client_unique_id: int) -> void:
-	if !multiplayer.is_server():
+	if not multiplayer.is_server():
 		return
-	print("[SPAWNER] Received client unique_id: ", client_unique_id)
 	spawn_player(client_unique_id)
-	
-var spawned_players: = {} 
 
 func spawn_player(id: int) -> void:
-	print("[SPAWNER] spawn_player called with ID: ", id)
-	print("[SPAWNER] is_server() =", multiplayer.is_server())
-	
-	if !multiplayer.is_server():
-		print("[SPAWNER] Not server, returning")
+	if not multiplayer.is_server():
 		return
-	
-	# Don't spawn player for server (server only observes)
+
 	var server_id = multiplayer.get_unique_id()
 	if id == server_id:
-		print("[SPAWNER] Skipping spawn for server (observer mode)")
 		return
 	
 	if network_player == null:
-		print("[SPAWNER] ERROR: network_player is null!")
 		return
-	
-	# Tránh spawn duplicate
+
 	if spawned_players.has(id):
-		print("[SPAWNER] Player with ID ", id, " already spawned, skipping")
 		return
 	
-	print("[SPAWNER] Spawning player with ID: ", id, " (type: ", typeof(id), ")")
+	if spawned_players.size() >= 4:
+		return
+	
+	if spawn_point == null:
+		return
+	
+	# STEP 1: Move all existing players to create space
+	var base_position = spawn_point.global_position
+	var existing_players = spawned_players.duplicate()
+	
+	for existing_id in existing_players.keys():
+		var player_index = _get_player_index(existing_id)
+		var new_position = base_position + Vector3((player_index + 1) * spawn_offset_x, 0, 0)
+		
+		# Update stored position
+		spawned_players[existing_id] = new_position
+		
+		# Move the actual player node
+		var player_node = _find_player_node(existing_id)
+		if player_node:
+			player_node.spawn_position = new_position
+			player_node.call_deferred("_apply_spawn_position", new_position)
+			_sync_spawn_position(existing_id, new_position)
+	
+	# STEP 2: Spawn new player at base position
+	spawned_players[id] = base_position
+	
 	var player: Node = network_player.instantiate()
 	if player == null:
-		print("[SPAWNER] ERROR: Failed to instantiate player!")
+		spawned_players.erase(id)
 		return
 	
 	player.name = str(id)
-	
-	var spawn_point := $"../SpawnPoint"
-	if spawn_point == null:
-		print("[SPAWNER] ERROR: SpawnPoint not found!")
-		return
-		
-	player.global_position = spawn_point.global_position
+	player.add_to_group("players")
 	player.set_multiplayer_authority(id)
-	
-	print("[SPAWNER] Player spawned with name: ", player.name, ", authority: ", id)
-	spawned_players[id] = true
+	player.spawn_position = base_position
 	
 	var spawn_path_node = get_node(spawn_path)
 	if spawn_path_node == null:
-		print("[SPAWNER] ERROR: spawn_path node not found: ", spawn_path)
+		spawned_players.erase(id)
 		return
-		
-	print("[SPAWNER] Adding player to: ", spawn_path)
-	spawn_path_node.call_deferred("add_child", player)
 	
+	spawn_path_node.add_child(player)
+	player.call_deferred("_apply_spawn_position", base_position)
+	
+	_sync_spawn_position(id, base_position)
+
+func _get_player_index(player_id: int) -> int:
+	var keys = spawned_players.keys()
+	for i in range(keys.size()):
+		if keys[i] == player_id:
+			return i
+	return -1
+
+func _find_player_node(player_id: int) -> Node:
+	var players = get_tree().get_nodes_in_group("players")
+	for player in players:
+		if player.name == str(player_id):
+			return player
+	return null
+
+func _sync_spawn_position(player_id: int, position: Vector3) -> void:
+	rpc("_set_spawn_position", player_id, position)
+
+@rpc("any_peer", "call_local", "reliable")
+func _set_spawn_position(target_player_id: int, position: Vector3) -> void:
+	if multiplayer.is_server():
+		return
+	
+	var player = _find_player_node(target_player_id)
+	if player:
+		player.spawn_position = position
+		player.call_deferred("_apply_spawn_position", position)
+		
+		if player.is_multiplayer_authority():
+			player.call_deferred("_set_camera_delayed")
+
 func _spawn_single_player():
 	var player: Node = network_player.instantiate()
 	player.name = "1"
-	
-	var spawn_point := $"../SpawnPoint"
-	player.global_position = spawn_point.global_position
+	player.add_to_group("players")
 	player.set_multiplayer_authority(1)
+	
+	if spawn_point == null:
+		spawn_point = $"../SpawnPoint"
+	
+	player.spawn_position = spawn_point.global_position
 	get_node(spawn_path).call_deferred("add_child", player)
